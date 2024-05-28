@@ -1138,6 +1138,11 @@ boost_library(
 
 boost_library(
     name = "iostreams",
+    exclude_src = [
+        "libs/iostreams/src/lzma.cpp",
+        "libs/iostreams/src/bzip2.cpp",
+        "libs/iostreams/src/zstd.cpp",
+    ],
     deps = [
         ":assert",
         ":bind",
@@ -1163,10 +1168,7 @@ boost_library(
         ":type",
         ":type_traits",
         ":utility",
-        "@bzip2//:bz2",
-        "@xz//:lzma",
         "@zlib",
-        "@zstd",
     ],
 )
 
