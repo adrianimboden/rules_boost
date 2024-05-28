@@ -1012,15 +1012,15 @@ boost_library(
     ]),
     exclude_src = ["**/fabscript"],
     deps = [
-        ":config",
-        ":function",
         ":align",
-        ":shared_ptr",
-        ":smart_ptr",
-        ":numeric_conversion",
+        ":config",
+        ":conversion",
+        ":function",
         ":implicit_cast",
         ":iterator",
-        ":conversion",
+        ":numeric_conversion",
+        ":shared_ptr",
+        ":smart_ptr",
         "@python3_10_x86_64-unknown-linux-gnu//:python_headers",
     ],
 )
@@ -1055,7 +1055,7 @@ boost_library(
         ":rational",
         ":static_assert",
         ":type_traits",
-        ":utility"
+        ":utility",
     ],
 )
 
@@ -1164,8 +1164,8 @@ boost_library(
         ":utility",
         "@bzip2//:bz2",
         "@xz//:lzma",
-        "@zstd",
         "@zlib",
+        "@zstd",
     ],
 )
 
@@ -1254,6 +1254,10 @@ boost_library(
         ":windows_x86_64": BOOST_LOCALE_WIN32_COPTS,
     }),
     includes = ["libs/locale/src/"],
+    linkopts = selects.with_or({
+        ("@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): ["-liconv"],
+        ("@platforms//os:android", "@platforms//os:linux", ":windows_x86_64"): [],
+    }),
     deps = [
         ":assert",
         ":config",
@@ -1270,10 +1274,6 @@ boost_library(
         ":unordered",
         ":utility",
     ],
-    linkopts = selects.with_or({
-        ("@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): ["-liconv"],
-        ("@platforms//os:android", "@platforms//os:linux", ":windows_x86_64"): [],
-    }),
 )
 
 boost_library(
