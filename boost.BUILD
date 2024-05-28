@@ -1914,7 +1914,7 @@ BOOST_STACKTRACE_SOURCES = selects.with_or({
         "libs/stacktrace/src/backtrace.cpp",
     ],
     ":linux_x86_64": [
-        "libs/stacktrace/src/backtrace.cpp",
+        "libs/stacktrace/src/addr2line.cpp",
     ],
     ("@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): [
         "libs/stacktrace/src/addr2line.cpp",
@@ -1944,7 +1944,6 @@ boost_library(
             "-lbacktrace -ldl",
         ],
         ":linux_x86_64": [
-            "-lbacktrace -ldl",
         ],
         ":linux_aarch64": [
             "-lbacktrace -ldl",
