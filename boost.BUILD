@@ -831,6 +831,10 @@ boost_library(
 )
 
 boost_library(
+    name = "scope",
+)
+
+boost_library(
     name = "filesystem",
     defines = [
         "BOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF",
@@ -852,6 +856,7 @@ boost_library(
         ":iterator",
         ":predef",
         ":range",
+        ":scope",
         ":scoped_array",
         ":smart_ptr",
         ":static_assert",
@@ -1001,9 +1006,12 @@ boost_library(
 
 boost_library(
     name = "python",
+    srcs = glob([
+        "libs/python/src/converter/**",
+        "libs/python/src/object/**",
+    ]),
     exclude_src = ["**/fabscript"],
     deps = [
-        "@python",
         ":config",
         ":function",
         ":align",
@@ -1013,6 +1021,7 @@ boost_library(
         ":implicit_cast",
         ":iterator",
         ":conversion",
+        "@python3_10_x86_64-unknown-linux-gnu//:python_headers",
     ],
 )
 
