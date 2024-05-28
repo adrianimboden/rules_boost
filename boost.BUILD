@@ -1014,6 +1014,7 @@ boost_library(
         ":config",
         ":conversion",
         ":function",
+        ":graph",
         ":implicit_cast",
         ":iterator",
         ":numeric_conversion",
