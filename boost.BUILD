@@ -1941,7 +1941,10 @@ boost_library(
             "BOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED",
         ],
         "//conditions:default": [],
-    }),
+    }) + [
+        "BOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line",
+        "BOOST_STACKTRACE_USE_ADDR2LINE",
+    ],
     exclude_src = ["libs/stacktrace/src/*.cpp"],
     linkopts = select({
         ":linux_ppc": [
