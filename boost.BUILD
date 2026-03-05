@@ -831,6 +831,10 @@ boost_library(
 )
 
 boost_library(
+    name = "scope",
+)
+
+boost_library(
     name = "filesystem",
     defines = [
         "BOOST_FILESYSTEM_NO_CXX20_ATOMIC_REF",
@@ -852,6 +856,7 @@ boost_library(
         ":iterator",
         ":predef",
         ":range",
+        ":scope",
         ":scoped_array",
         ":smart_ptr",
         ":static_assert",
