@@ -1,6 +1,6 @@
-load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_library", "boost_so_library", "default_copts", "default_defines", "hdr_list")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
@@ -1003,16 +1003,16 @@ boost_library(
     name = "python",
     exclude_src = ["**/fabscript"],
     deps = [
-        "@python",
-        ":config",
-        ":function",
         ":align",
-        ":shared_ptr",
-        ":smart_ptr",
-        ":numeric_conversion",
+        ":config",
+        ":conversion",
+        ":function",
         ":implicit_cast",
         ":iterator",
-        ":conversion",
+        ":numeric_conversion",
+        ":shared_ptr",
+        ":smart_ptr",
+        "@python",
     ],
 )
 
@@ -1046,7 +1046,7 @@ boost_library(
         ":rational",
         ":static_assert",
         ":type_traits",
-        ":utility"
+        ":utility",
     ],
 )
 
@@ -1155,8 +1155,8 @@ boost_library(
         ":utility",
         "@bzip2//:bz2",
         "@xz//:lzma",
-        "@zstd",
         "@zlib",
+        "@zstd",
     ],
 )
 
@@ -1196,6 +1196,7 @@ BOOST_LOCALE_COMMON_SOURCES = glob(
         "libs/locale/src/boost/locale/util/*.cpp",
         "libs/locale/src/boost/locale/util/*.hpp",
     ],
+    allow_empty = True,
     exclude = [
         "libs/locale/src/boost/locale/util/iconv.hpp",
     ],
@@ -1207,15 +1208,21 @@ BOOST_LOCALE_STD_SOURCES = BOOST_LOCALE_COMMON_SOURCES + [
 
 BOOST_LOCALE_POSIX_SOURCES = BOOST_LOCALE_COMMON_SOURCES + [
     "libs/locale/src/boost/locale/util/iconv.hpp",
-] + glob([
-    "libs/locale/src/boost/locale/posix/*.cpp",
-    "libs/locale/src/boost/locale/posix/*.hpp",
-])
+] + glob(
+    [
+        "libs/locale/src/boost/locale/posix/*.cpp",
+        "libs/locale/src/boost/locale/posix/*.hpp",
+    ],
+    allow_empty = True,
+)
 
-BOOST_LOCALE_WIN32_SOURCES = BOOST_LOCALE_COMMON_SOURCES + glob([
-    "libs/locale/src/boost/locale/win32/*.cpp",
-    "libs/locale/src/boost/locale/win32/*.hpp",
-])
+BOOST_LOCALE_WIN32_SOURCES = BOOST_LOCALE_COMMON_SOURCES + glob(
+    [
+        "libs/locale/src/boost/locale/win32/*.cpp",
+        "libs/locale/src/boost/locale/win32/*.hpp",
+    ],
+    allow_empty = True,
+)
 
 BOST_LOCALE_STD_COPTS = [
     "-DBOOST_LOCALE_NO_POSIX_BACKEND=1",
@@ -1245,6 +1252,10 @@ boost_library(
         ":windows_x86_64": BOOST_LOCALE_WIN32_COPTS,
     }),
     includes = ["libs/locale/src/"],
+    linkopts = selects.with_or({
+        ("@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): ["-liconv"],
+        ("@platforms//os:android", "@platforms//os:linux", ":windows_x86_64"): [],
+    }),
     deps = [
         ":assert",
         ":config",
@@ -1261,10 +1272,6 @@ boost_library(
         ":unordered",
         ":utility",
     ],
-    linkopts = selects.with_or({
-        ("@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): ["-liconv"],
-        ("@platforms//os:android", "@platforms//os:linux", ":windows_x86_64"): [],
-    }),
 )
 
 boost_library(
@@ -2646,11 +2653,14 @@ boost_library(
 
 boost_library(
     name = "url",
-    srcs = glob([
-        "libs/url/src/detail/**/*.cpp",
-        "libs/url/src/grammar/**/*.cpp",
-        "libs/url/src/rfc/**/*.cpp",
-    ]),
+    srcs = glob(
+        [
+            "libs/url/src/detail/**/*.cpp",
+            "libs/url/src/grammar/**/*.cpp",
+            "libs/url/src/rfc/**/*.cpp",
+        ],
+        allow_empty = True,
+    ),
     deps = [
         ":align",
         ":assert",
