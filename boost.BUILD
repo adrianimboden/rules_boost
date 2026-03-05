@@ -1013,7 +1013,7 @@ boost_library(
         ":numeric_conversion",
         ":shared_ptr",
         ":smart_ptr",
-        "@python",
+        "@python3_10_x86_64-unknown-linux-gnu//:python_headers",
     ],
 )
 
