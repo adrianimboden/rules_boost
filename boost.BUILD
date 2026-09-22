@@ -1,6 +1,6 @@
-load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_library", "boost_so_library", "default_copts", "default_defines", "hdr_list")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
@@ -1963,6 +1963,7 @@ boost_library(
         ":predef",
         ":static_assert",
         ":type_traits",
+        "@libbacktrace",
     ],
 )
 
