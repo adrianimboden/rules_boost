@@ -1502,6 +1502,8 @@ boost_library(
 
 boost_library(
     name = "process",
+    srcs =
+        glob(["libs/process/src/detail/*.cpp"]),
     deps = [
         ":algorithm",
         ":asio",
