@@ -1197,88 +1197,6 @@ boost_library(
     name = "limits",
 )
 
-BOOST_LOCALE_COMMON_SOURCES = glob(
-    [
-        "libs/locale/src/boost/locale/encoding/*.cpp",
-        "libs/locale/src/boost/locale/encoding/*.hpp",
-        "libs/locale/src/boost/locale/shared/*.cpp",
-        "libs/locale/src/boost/locale/shared/*.hpp",
-        "libs/locale/src/boost/locale/std/*.cpp",
-        "libs/locale/src/boost/locale/std/*.hpp",
-        "libs/locale/src/boost/locale/util/*.cpp",
-        "libs/locale/src/boost/locale/util/*.hpp",
-    ],
-    exclude = [
-        "libs/locale/src/boost/locale/util/iconv.hpp",
-    ],
-)
-
-BOOST_LOCALE_STD_SOURCES = BOOST_LOCALE_COMMON_SOURCES + [
-    "libs/locale/src/boost/locale/util/iconv.hpp",
-]
-
-BOOST_LOCALE_POSIX_SOURCES = BOOST_LOCALE_COMMON_SOURCES + [
-    "libs/locale/src/boost/locale/util/iconv.hpp",
-] + glob([
-    "libs/locale/src/boost/locale/posix/*.cpp",
-    "libs/locale/src/boost/locale/posix/*.hpp",
-])
-
-BOOST_LOCALE_WIN32_SOURCES = BOOST_LOCALE_COMMON_SOURCES + glob([
-    "libs/locale/src/boost/locale/win32/*.cpp",
-    "libs/locale/src/boost/locale/win32/*.hpp",
-])
-
-BOST_LOCALE_STD_COPTS = [
-    "-DBOOST_LOCALE_NO_POSIX_BACKEND=1",
-    "-DBOOST_LOCALE_NO_WINAPI_BACKEND",
-    "-DBOOST_LOCALE_WITH_ICONV",
-]
-
-BOOST_LOCALE_POSIX_COPTS = [
-    "-DBOOST_LOCALE_WITH_ICONV",
-    "-DBOOST_LOCALE_NO_WINAPI_BACKEND",
-]
-
-BOOST_LOCALE_WIN32_COPTS = [
-    "-DBOOST_LOCALE_NO_POSIX_BACKEND",
-]
-
-boost_library(
-    name = "locale",
-    srcs = selects.with_or({
-        "@platforms//os:android": BOOST_LOCALE_STD_SOURCES,
-        ("@platforms//os:linux", "@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): BOOST_LOCALE_POSIX_SOURCES,
-        ":windows_x86_64": BOOST_LOCALE_WIN32_SOURCES,
-    }),
-    copts = selects.with_or({
-        "@platforms//os:android": BOST_LOCALE_STD_COPTS,
-        ("@platforms//os:linux", "@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): BOOST_LOCALE_POSIX_COPTS,
-        ":windows_x86_64": BOOST_LOCALE_WIN32_COPTS,
-    }),
-    includes = ["libs/locale/src/"],
-    linkopts = selects.with_or({
-        ("@platforms//os:osx", "@platforms//os:ios", "@platforms//os:watchos", "@platforms//os:tvos"): ["-liconv"],
-        ("@platforms//os:android", "@platforms//os:linux", ":windows_x86_64"): [],
-    }),
-    deps = [
-        ":assert",
-        ":config",
-        ":core",
-        ":cstdint",
-        ":function",
-        ":iterator",
-        ":predef",
-        ":shared_ptr",
-        ":smart_ptr",
-        ":static_assert",
-        ":thread",
-        ":type_traits",
-        ":unordered",
-        ":utility",
-    ],
-)
-
 boost_library(
     name = "lockfree",
     deps = [
@@ -2656,27 +2574,5 @@ boost_library(
         ":typeof",
         ":utility",
         ":vmd",
-    ],
-)
-
-boost_library(
-    name = "url",
-    srcs = glob([
-        "libs/url/src/detail/**/*.cpp",
-        "libs/url/src/grammar/**/*.cpp",
-        "libs/url/src/rfc/**/*.cpp",
-    ]),
-    deps = [
-        ":align",
-        ":assert",
-        ":config",
-        ":core",
-        ":mp11",
-        ":optional",
-        ":static_assert",
-        ":system",
-        ":throw_exception",
-        ":type_traits",
-        ":variant2",
     ],
 )
